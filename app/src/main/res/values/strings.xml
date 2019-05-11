@@ -1,0 +1,23 @@
+<resources>
+	<string name="app_name">MyGif1102</string>
+	<string name="home">Home</string>
+	<string name="explore">Explore</string>
+	<string name="favorite">Favorite</string>
+	<string name="user">User</string>
+
+	<string name="giphy_api_key">WNHN34giS02m5C8EDvufq4E8CjKDIk02</string>
+
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="trending_searches">Trending Searches</string>
+	<string name="trending_gifs">Trending GIFs</string>
+	<string name="icon_home">Icon Home</string>
+	<string name="button_search">Button Search</string>
+	<string name="search_something">search something ...</string>
+	<string name="back">back</string>
+	<string name="auto_fill_hint">auto fill hints</string>
+	<string name="detail">Detail</string>
+	<string name="source">Source:</string>
+	<string name="default_text">default text</string>
+	<string name="related">Related</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white"
+	tools:context=".fragments.HomeFragment">
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/recyclerTrendingGifs"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/textTitleTrendingGifs" />
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/recyclerTrendingSearches"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="1.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/textTitleTrendingSearches" />
+
+	<TextView
+		android:id="@+id/textTitleTrendingSearches"
+		style="@style/TextTitleTopic"
+		android:text="@string/trending_searches"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="1.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/textTitleTrendingGifs"
+		style="@style/TextTitleTopic"
+		android:layout_marginTop="@dimen/dp_8"
+		android:text="@string/trending_gifs"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/recyclerTrendingSearches" />
+</android.support.constraint.ConstraintLayout>

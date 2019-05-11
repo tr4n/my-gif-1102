@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	style="@style/ViewClickable"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:elevation="@dimen/dp_12"
+	tools:context=".fragments.DetailFragment">
+
+	<android.support.constraint.ConstraintLayout
+		android:id="@+id/constraintLayout"
+		style="@style/NavBar"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<ImageView
+			android:id="@+id/imageBackDetail"
+			style="@style/ButtonSquareSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:src="@drawable/ic_arrow_back_24dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/textTitleDetail"
+			style="@style/TextTitleHeader"
+			android:layout_marginStart="8dp"
+			android:layout_marginEnd="8dp"
+			android:text="@string/detail"
+			android:textSize="@dimen/sp_14"
+			app:layout_constraintBottom_toBottomOf="@+id/imageBackDetail"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/imageBackDetail"
+			app:layout_constraintTop_toTopOf="@+id/imageBackDetail" />
+	</android.support.constraint.ConstraintLayout>
+
+	<ScrollView
+		android:id="@+id/scrollDetail"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:background="@color/black"
+		app:layout_constraintBottom_toTopOf="@+id/constraintRelated"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+		<android.support.constraint.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/imageFacebook"
+				style="@style/ButtonSquareNormal"
+				android:layout_marginTop="16dp"
+				android:layout_marginBottom="32dp"
+				android:src="@drawable/ic_facebook_app_logo"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/textSourceDetail" />
+
+			<ImageView
+				android:id="@+id/imageDownload"
+				style="@style/ButtonSquareNormal"
+				android:layout_marginStart="16dp"
+				android:src="@drawable/ic_file_download_black_24dp"
+				app:layout_constraintBottom_toBottomOf="@+id/imageFacebook"
+				app:layout_constraintStart_toEndOf="@+id/imageMessenger"
+				app:layout_constraintTop_toTopOf="@+id/imageFacebook" />
+
+			<ImageView
+				android:id="@+id/imageMessenger"
+				style="@style/ButtonSquareNormal"
+				android:layout_marginStart="16dp"
+				android:src="@drawable/ic_messenger_logo"
+				app:layout_constraintBottom_toBottomOf="@+id/imageFacebook"
+				app:layout_constraintStart_toEndOf="@+id/imageFacebook"
+				app:layout_constraintTop_toTopOf="@+id/imageFacebook" />
+
+			<ImageView
+				android:id="@+id/imageClipboard"
+				style="@style/ButtonSquareNormal"
+				android:layout_marginEnd="16dp"
+				android:src="@drawable/ic_content_copy_black_24dp"
+				app:layout_constraintBottom_toBottomOf="@+id/imageFacebook"
+				app:layout_constraintEnd_toStartOf="@+id/imageFacebook"
+				app:layout_constraintTop_toTopOf="@+id/imageFacebook" />
+
+			<ImageView
+				android:id="@+id/imageFavorite"
+
+				style="@style/ButtonSquareNormal"
+				android:layout_marginEnd="16dp"
+				android:src="@drawable/ic_favorite_border_white_24dp"
+				app:layout_constraintBottom_toBottomOf="@+id/imageFacebook"
+				app:layout_constraintEnd_toStartOf="@+id/imageClipboard"
+				app:layout_constraintTop_toTopOf="@+id/imageFacebook" />
+
+			<!--<ImageView-->
+			<!--android:id="@+id/imageDetail"-->
+			<!--android:layout_width="0dp"-->
+			<!--android:layout_height="wrap_content"-->
+			<!--android:layout_marginStart="16dp"-->
+			<!--android:layout_marginEnd="16dp"-->
+			<!--android:adjustViewBounds="true"-->
+			<!--android:src="@color/colorAccent"-->
+			<!--app:layout_constraintEnd_toEndOf="parent"-->
+			<!--app:layout_constraintStart_toStartOf="parent"-->
+			<!--app:layout_constraintTop_toTopOf="parent" />-->
+			<LinearLayout
+				android:id="@+id/linearLayout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="@dimen/dp_8"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent">
+
+				<com.example.mygif1102.gifview.GIFView
+					android:id="@+id/detailGIFView"
+					android:layout_width="200dp"
+					android:layout_height="200dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp" />
+			</LinearLayout>
+
+
+			<TextView
+				android:id="@+id/textSource"
+				style="@style/TextCapsNormal"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/source"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+			<TextView
+				android:id="@+id/textSourceDetail"
+				style="@style/TextCapsNormal"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/default_text"
+				app:layout_constraintBottom_toBottomOf="@+id/textSource"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@+id/textSource"
+				app:layout_constraintTop_toTopOf="@+id/textSource" />
+
+		</android.support.constraint.ConstraintLayout>
+	</ScrollView>
+
+	<android.support.constraint.ConstraintLayout
+		android:id="@+id/constraintRelated"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:background="@color/colorPrimaryDark"
+		app:layout_constraintBottom_toTopOf="@+id/recyclerRelated"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+
+		<TextView
+			android:id="@+id/textRelated"
+			style="@style/TextTitleHeader"
+			android:layout_marginStart="8dp"
+			android:text="@string/related"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageView
+			android:id="@+id/imageRelated"
+			style="@style/ButtonSquareSmall"
+			android:layout_marginStart="8dp"
+			android:src="@android:drawable/arrow_up_float"
+			app:layout_constraintBottom_toBottomOf="@+id/textRelated"
+			app:layout_constraintStart_toEndOf="@+id/textRelated"
+			app:layout_constraintTop_toTopOf="@+id/textRelated" />
+
+	</android.support.constraint.ConstraintLayout>
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/recyclerRelated"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

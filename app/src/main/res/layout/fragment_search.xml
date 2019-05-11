@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	style="@style/ViewClickable"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:elevation="12dp"
+	tools:context=".fragments.SearchFragment">
+
+	<android.support.constraint.ConstraintLayout
+		android:id="@+id/constraintNavbarSearch"
+		style="@style/NavBar"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<ImageView
+			android:id="@id/imageSearch"
+			style="@style/ButtonSquareSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:layout_marginEnd="@dimen/dp_8"
+			android:layout_marginBottom="8dp"
+			android:contentDescription="@string/button_search"
+			android:src="@drawable/ic_search_24dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageView
+			android:id="@+id/imageButtonBackSearch"
+			style="@style/ButtonSquareSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/back"
+			android:src="@drawable/ic_arrow_back_24dp"
+			app:layout_constraintBottom_toBottomOf="@id/imageSearch"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@+id/imageSearch" />
+
+		<EditText
+			android:id="@+id/editSearch"
+			style="@style/SearchInput"
+			android:autofillHints="@string/auto_fill_hint"
+			android:focusable="true"
+			android:hint="@string/search_something"
+			android:inputType="textPersonName"
+			app:layout_constraintBottom_toBottomOf="@+id/imageSearch"
+			app:layout_constraintEnd_toStartOf="@+id/imageSearch"
+			app:layout_constraintStart_toEndOf="@+id/imageButtonBackSearch"
+			app:layout_constraintTop_toTopOf="@+id/imageSearch"
+			tools:targetApi="o" />
+
+	</android.support.constraint.ConstraintLayout>
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/recyclerSearches"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_marginTop="60dp"
+		android:clipToPadding="false"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/constraintNavbarSearch" />
+
+</android.support.constraint.ConstraintLayout>
