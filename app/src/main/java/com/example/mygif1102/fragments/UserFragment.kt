@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.mygif1102.Constants
+import com.example.mygif1102.utils.MESSAGE_TYPE_TITLE
 import com.example.mygif1102.OnFragmentInteractionListener
 import com.example.mygif1102.R
 import com.example.mygif1102.model.TitleMessage
@@ -48,7 +48,7 @@ class UserFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_user, container, false)
         listener?.onFragmentInteraction(
             TitleMessage(
-                Constants.MESSAGE_TYPE_TITLE,
+                MESSAGE_TYPE_TITLE,
                 getString(R.string.user),
                 R.drawable.ic_person_24dp
             )

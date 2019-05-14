@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.example.mygif1102.SearchAdapter.SearchViewHolder
 import com.example.mygif1102.gifview.GIFView
 import com.example.mygif1102.model.GifImage
+import com.example.mygif1102.utils.SCREEN_WIDTH
 import kotlinx.android.synthetic.main.item_search.view.*
 
 class SearchAdapter(var items: List<GifImage>, private val onItemClick: (gifImage: GifImage?) -> Unit) :
@@ -34,7 +35,7 @@ class SearchAdapter(var items: List<GifImage>, private val onItemClick: (gifImag
             gifImage = item
             val width = item.width
             val height = item.height
-            val fixedWidth = Constants.SCREEN_WIDTH shr 1
+            val fixedWidth = SCREEN_WIDTH shr 1
 
            itemView.imageItem.setLayoutParams(width, height, fixedWidth, GIFView.WIDTH_SCALE)
           //  itemView.imageItem.imageUrl = item.url

@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.mygif1102.Constants
+import com.example.mygif1102.utils.EXTRA_TITLE
 import com.example.mygif1102.R
 import com.example.mygif1102.model.TitleMessage
 import kotlinx.android.synthetic.main.fragment_nav_bar.view.*
@@ -49,7 +49,7 @@ class NavBarFragment : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_nav_bar, container, false)
 
-        val titleMessage =  arguments?.getParcelable(Constants.EXTRA_TITLE) as TitleMessage
+        val titleMessage =  arguments?.getParcelable(EXTRA_TITLE) as TitleMessage
         view.textTitleNavBar.text = titleMessage.title
         view.imageIconTab.setImageResource(titleMessage.iconId)
 

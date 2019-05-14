@@ -10,22 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.mygif1102.*
 import com.example.mygif1102.http.Giphy
-import com.example.mygif1102.model.GifImage
+import com.example.mygif1102.http.OnResponseListener
 import com.example.mygif1102.model.GifMessage
+import com.example.mygif1102.model.GifsResponse
 import com.example.mygif1102.model.TitleMessage
-import com.example.mygif1102.networks.IGiphyService
-import com.example.mygif1102.networks.GifsResponse
+import com.example.mygif1102.utils.MESSAGE_TYPE_GIF
+import com.example.mygif1102.utils.MESSAGE_TYPE_TITLE
 import kotlinx.android.synthetic.main.fragment_home.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.lang.Exception
 
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
+private const val TAG = "HomeFragment"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
@@ -35,6 +34,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
+
+
+
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -57,12 +59,12 @@ class HomeFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
         listener?.onFragmentInteraction(
             TitleMessage(
-                Constants.MESSAGE_TYPE_TITLE,
+                MESSAGE_TYPE_TITLE,
                 getString(R.string.home),
                 R.drawable.ic_home_24dp
             )
         )
-//        IGiphyService.instance.getTrendings(getString(R.string.giphy_api_key), 20, 0)
+//        IGiphyService.instance.getTrendingGifs(getString(R.string.giphy_api_key), 20, 0)
 //            .enqueue(object : Callback<GifsResponse> {
 //                override fun onResponse(call: Call<GifsResponse>?, response: Response<GifsResponse>?) {
 //                    val dataList = response!!.body()!!.datas
@@ -97,20 +99,30 @@ class HomeFragment : Fragment() {
 //                }
 //            })
 
-        Giphy.instance.getTrendings(getString(R.string.giphy_api_key), 20, 0, onGetResult = { gifImages ->
-            recyclerTrendingGifs.apply {
-                layoutManager = StaggeredGridLayoutManager(2, 1)
-                adapter = SearchAdapter(gifImages, onItemClick = { gifImage ->
-                    listener?.onFragmentInteraction(
-                        GifMessage(
-                            Constants.MESSAGE_TYPE_GIF,
-                            gifImage!!.id
-                        )
-                    )
-                })
-            }
+        Giphy.instance.getTrendingGifs(
+            BuildConfig.GIPHY_API_KEY,
+            20,
+            0,
+            object : OnResponseListener<GifsResponse> {
+                override fun onSuccess(response: GifsResponse) {
+                    recyclerTrendingGifs.apply {
+                        layoutManager = StaggeredGridLayoutManager(2, 1)
+                        adapter = SearchAdapter(response.gifImages, onItemClick = { gifImage ->
+                            listener?.onFragmentInteraction(
+                                GifMessage(
+                                    MESSAGE_TYPE_GIF,
+                                    gifImage!!.id
+                                )
+                            )
+                        })
+                    }
+                }
 
-        })
+                override fun onFailed(exception: Exception) {
+                    Log.e(TAG, "onFailed: ${exception.message}")
+                }
+            })
+
         return view
     }
 

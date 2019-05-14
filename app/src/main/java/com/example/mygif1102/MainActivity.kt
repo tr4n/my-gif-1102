@@ -7,6 +7,8 @@ import com.example.mygif1102.fragments.*
 import com.example.mygif1102.model.GifMessage
 import com.example.mygif1102.model.MessageData
 import com.example.mygif1102.model.TitleMessage
+import com.example.mygif1102.utils.EXTRA_GIF
+import com.example.mygif1102.utils.EXTRA_TITLE
 import com.facebook.drawee.backends.pipeline.Fresco
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -35,12 +37,12 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
         val bundle = Bundle()
         // if (message.type == Constants.MESSAGE_TYPE_TITLE) {
         if (message is TitleMessage) {
-            bundle.putParcelable(Constants.EXTRA_TITLE, message)
+            bundle.putParcelable(EXTRA_TITLE, message)
             val navBarFragment = NavBarFragment()
             navBarFragment.arguments = bundle
             loadFragment(R.id.frameNavbar, navBarFragment)
         } else if (message is GifMessage) {
-            bundle.putParcelable(Constants.EXTRA_GIF, message)
+            bundle.putParcelable(EXTRA_GIF, message)
             val detailFragment = DetailFragment()
             detailFragment.arguments = bundle
             loadFragmentBackStack(R.id.constraintMain, detailFragment)

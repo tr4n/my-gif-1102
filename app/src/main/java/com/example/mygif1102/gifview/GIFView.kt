@@ -1,14 +1,12 @@
 package com.example.mygif1102.gifview
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Movie
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import com.example.mygif1102.Constants
-import java.net.URL
+import com.example.mygif1102.utils.COLORS
 import kotlin.random.Random
 
 class GIFView : View {
@@ -25,7 +23,7 @@ class GIFView : View {
 
     init {
         isFocusable = true
-        val randomResourceColorId = Constants.COLORS[Random.nextInt(Constants.COLORS.size)]
+        val randomResourceColorId = COLORS[Random.nextInt(COLORS.size)]
         setBackgroundResource(randomResourceColorId)
     }
 

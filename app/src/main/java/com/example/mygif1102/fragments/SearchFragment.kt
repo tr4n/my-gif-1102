@@ -8,28 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.util.Config
 import android.util.Log
-import com.example.mygif1102.Constants
+import com.example.mygif1102.BuildConfig
+import com.example.mygif1102.utils.MESSAGE_TYPE_GIF
 import com.example.mygif1102.OnFragmentInteractionListener
 import com.example.mygif1102.R
 import com.example.mygif1102.SearchAdapter
 import com.example.mygif1102.http.Giphy
-import com.example.mygif1102.model.GifImage
+import com.example.mygif1102.http.OnResponseListener
 import com.example.mygif1102.model.GifMessage
-import com.example.mygif1102.networks.GifsResponse
-import com.example.mygif1102.networks.IGiphyService
-import kotlinx.android.synthetic.main.fragment_detail.view.*
+import com.example.mygif1102.model.GifsResponse
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_search.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.lang.Exception
 
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val TAG = "SearchFragment"
 
 /**
  * A simple [Fragment] subclass.
@@ -40,7 +39,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class SearchFragment : Fragment(), View.OnClickListener{
+class SearchFragment : Fragment(), View.OnClickListener {
 
     private var listener: OnFragmentInteractionListener? = null
     override fun onCreateView(
@@ -64,7 +63,7 @@ class SearchFragment : Fragment(), View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.imageButtonBackSearch -> activity?.onBackPressed()
         }
     }
@@ -113,23 +112,33 @@ class SearchFragment : Fragment(), View.OnClickListener{
                 }
             })
 */
-        Giphy.instance.getSearches(getString(R.string.giphy_api_key), q,20, 0, onGetResult = { gifImages ->
-            view.recyclerSearches.apply {
-                layoutManager = StaggeredGridLayoutManager(2, 1)
-                adapter = SearchAdapter(gifImages, onItemClick = { gifImage ->
-                    listener?.onFragmentInteraction(
-                        GifMessage(
-                            Constants.MESSAGE_TYPE_GIF,
-                            gifImage!!.id
-                        )
-                    )
-                })
-            }
 
-        })
+        Giphy.instance.getSearches(
+            BuildConfig.GIPHY_API_KEY,
+            q,
+            20,
+            0,
+            object : OnResponseListener<GifsResponse> {
+                override fun onSuccess(response: GifsResponse) {
+                    view.recyclerSearches.apply {
+                        layoutManager = StaggeredGridLayoutManager(2, 1)
+                        adapter = SearchAdapter(response.gifImages, onItemClick = { gifImage ->
+                            listener?.onFragmentInteraction(
+                                GifMessage(
+                                    MESSAGE_TYPE_GIF,
+                                    gifImage!!.id
+                                )
+                            )
+                        })
+                    }
+                }
+
+                override fun onFailed(exception: Exception) {
+                    Log.d(TAG, "#onFailed: ${exception.message}")
+                }
+            })
 
     }
-
 
 
 }

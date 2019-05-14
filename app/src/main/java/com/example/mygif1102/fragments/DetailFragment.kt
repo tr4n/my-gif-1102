@@ -1,49 +1,36 @@
 package com.example.mygif1102.fragments
 
-import android.app.ActionBar
 import android.content.Context
-import android.content.res.Resources
-import android.net.Uri
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import com.bumptech.glide.Glide
-import com.example.mygif1102.Constants
+import com.example.mygif1102.BuildConfig
+import com.example.mygif1102.utils.EXTRA_GIF
 import com.example.mygif1102.OnFragmentInteractionListener
 import com.example.mygif1102.R
 import com.example.mygif1102.SearchAdapter
+import com.example.mygif1102.utils.SCREEN_WIDTH
 import com.example.mygif1102.gifview.GIFView
 import com.example.mygif1102.http.Giphy
-import com.example.mygif1102.model.GifImage
+import com.example.mygif1102.http.OnResponseListener
 import com.example.mygif1102.model.GifMessage
-import com.example.mygif1102.model.TitleMessage
-import com.example.mygif1102.networks.GifResponse
-import com.example.mygif1102.networks.GifsResponse
-import com.example.mygif1102.networks.IGiphyService
-import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.drawee.interfaces.DraweeController
-import kotlinx.android.synthetic.main.fragment_detail.*
+import com.example.mygif1102.model.GifResponse
+import com.example.mygif1102.model.GifsResponse
+import com.example.mygif1102.utils.MESSAGE_TYPE_GIF
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.item_search.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.random.Random
+import java.lang.Exception
 
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val TAG = "DetailFragment"
 
 /**
  * A simple [Fragment] subclass.
@@ -76,12 +63,12 @@ class DetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
-        val gifMessage = arguments?.getParcelable(Constants.EXTRA_GIF) as? GifMessage
-        if (gifMessage != null)
+        val gifMessage = arguments?.getParcelable(EXTRA_GIF) as? GifMessage
+        // if (gifMessage != null)
         /* IGiphyService.instance.getGif(gifMessage.id, getString(R.string.giphy_api_key))
              .enqueue(object : Callback<GifResponse> {
                  override fun onFailure(call: Call<GifResponse>, t: Throwable) {
-                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                  }
 
                  override fun onResponse(call: Call<GifResponse>, response: Response<GifResponse>) {
@@ -116,13 +103,37 @@ class DetailFragment : Fragment() {
              R.drawable.ic_search_24dp
          )
      )*/
-            Giphy.instance.getGif(gifMessage.id, getString(R.string.giphy_api_key), onGetResult = { gifImage ->
+        /* Giphy.instance.getGif(gifMessage.id, getString(R.string.giphy_api_key), onGetResult = { gifImage ->
 
-                view.detailGIFView.apply {
-                    setLayoutParams(gifImage.width, gifImage.height, Constants.SCREEN_WIDTH - 10, GIFView.WIDTH_SCALE)
-                    gifStream = gifImage.url
+             view.detailGIFView.apply {
+                 setLayoutParams(gifImage.width, gifImage.height, SCREEN_WIDTH - 10, GIFView.WIDTH_SCALE)
+                 gifStream = gifImage.url
+             }
+         })*/
+        gifMessage?.let {
+            Giphy.instance.getGif(it.id, BuildConfig.GIPHY_API_KEY, object : OnResponseListener<GifResponse> {
+                override fun onSuccess(response: GifResponse) {
+                    view.detailGIFView.apply {
+
+                        setLayoutParams(
+                            response.gifImage.width,
+                            response.gifImage.height,
+                            SCREEN_WIDTH - 10,
+                            GIFView.WIDTH_SCALE
+                        )
+
+                        gifStream = response.gifImage.url
+                    }
+                    view.textTitleDetail.text = response.title
+                    view.textSourceDetail.text = if (response.source.isEmpty()) "giphy.com" else response.source
+                }
+
+                override fun onFailed(exception: Exception) {
+                    Log.e(TAG, "onFailed: ${exception.message}")
                 }
             })
+        }
+
         return view
     }
 
