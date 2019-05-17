@@ -3,6 +3,7 @@ package com.example.mygif1102.fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +18,13 @@ import com.example.mygif1102.R
 import com.example.mygif1102.SearchAdapter
 import com.example.mygif1102.http.Giphy
 import com.example.mygif1102.http.OnResponseListener
+import com.example.mygif1102.model.GifImage
 import com.example.mygif1102.model.GifMessage
 import com.example.mygif1102.model.GifsResponse
+import com.example.mygif1102.recyclerview.EndlessRecyclerViewScrollListener
+import com.example.mygif1102.recyclerview.SpeedyStaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.lang.Exception
 
@@ -40,16 +45,36 @@ private const val TAG = "SearchFragment"
  *
  */
 class SearchFragment : Fragment(), View.OnClickListener {
-
+    private var gifOffset = 0
+    private val staggeredGridLayoutManager = SpeedyStaggeredGridLayoutManager(2, 1)
+    private val gifImages = ArrayList<GifImage>()
+    private var gifAdapter: SearchAdapter? = null
+    var q = ""
     private var listener: OnFragmentInteractionListener? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_search, container, false)
-        view.imageSearch.setOnClickListener { showGifs(view) }
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
+
         view.imageButtonBackSearch.setOnClickListener(this)
+        gifAdapter = SearchAdapter(gifImages, onItemClick = { gifImage ->
+            listener?.onFragmentInteraction(
+                GifMessage(
+                    MESSAGE_TYPE_GIF,
+                    gifImage!!.id
+                )
+            )
+        })
+        view.recyclerSearches.apply {
+            layoutManager = staggeredGridLayoutManager
+            adapter = gifAdapter
+        }
+        view.searchProgressBar.isIndeterminate = true
+
+        view.imageSearch.setOnClickListener { showGifs() }
+
         return view
     }
 
@@ -73,45 +98,11 @@ class SearchFragment : Fragment(), View.OnClickListener {
         listener = null
     }
 
-    private fun showGifs(view: View) {
-        val q = editSearch.text.toString()
-        /*IGiphyService.instance.getSearches(getString(R.string.giphy_api_key), q, 200, 0)
-            .enqueue(object : Callback<GifsResponse> {
-                override fun onResponse(call: Call<GifsResponse>?, response: Response<GifsResponse>?) {
-                    val dataList = response!!.body()!!.datas
-                    val items = ArrayList<GifImage>()
-                    dataList.forEach {
-                        items.add(
-                            GifImage(
-                                it.id,
-                                it.images.fixedWidthJson.width.toInt(),
-                                it.images.fixedWidthJson.height.toInt(),
-                                it.images.fixedWidthJson.url
-                            )
-                        )
-                    }
-                    Log.d("items", items.toString())
-                    view.recyclerSearches.layoutManager =
-                        StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                    view.recyclerSearches.adapter = SearchAdapter(items, onItemClick = {
-                        listener?.onFragmentInteraction(
-                            GifMessage(
-                                Constants.MESSAGE_TYPE_GIF,
-                                it!!.id
-                            )
-                        )
-//                        activity!!.supportFragmentManager.beginTransaction()
-//                            .add(R.id.constraintMain, DetailFragment())
-//                            .addToBackStack(null)
-//                            .commit()
-                    })
-                }
-
-                override fun onFailure(call: Call<GifsResponse>?, t: Throwable?) {
-                    Log.e("Error", t.toString())
-                }
-            })
-*/
+    private fun showGifs() {
+        gifImages.clear()
+        gifOffset = 0
+        gifAdapter?.updateData(ArrayList<GifImage>())
+        q = editSearch.text.toString()
 
         Giphy.instance.getSearches(
             BuildConfig.GIPHY_API_KEY,
@@ -120,17 +111,9 @@ class SearchFragment : Fragment(), View.OnClickListener {
             0,
             object : OnResponseListener<GifsResponse> {
                 override fun onSuccess(response: GifsResponse) {
-                    view.recyclerSearches.apply {
-                        layoutManager = StaggeredGridLayoutManager(2, 1)
-                        adapter = SearchAdapter(response.gifImages, onItemClick = { gifImage ->
-                            listener?.onFragmentInteraction(
-                                GifMessage(
-                                    MESSAGE_TYPE_GIF,
-                                    gifImage!!.id
-                                )
-                            )
-                        })
-                    }
+                    gifAdapter?.insertData(response.gifImages)
+                    gifOffset += response.gifImages.size
+                    setLoadMoreItems()
                 }
 
                 override fun onFailed(exception: Exception) {
@@ -138,6 +121,51 @@ class SearchFragment : Fragment(), View.OnClickListener {
                 }
             })
 
+    }
+
+    private fun setLoadMoreItems() {
+        view?.apply {
+
+            searchProgressBar.visibility = View.GONE
+            recyclerSearches.addOnScrollListener(object :
+                EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+                override fun onLoadMore(page: Int, totalItemsCount: Int) {
+
+                    searchProgressBar.visibility = View.VISIBLE
+                    Giphy.instance.getSearches(
+                        BuildConfig.GIPHY_API_KEY,
+                        q,
+                        30,
+                        gifOffset,
+                        object : OnResponseListener<GifsResponse> {
+                            override fun onSuccess(response: GifsResponse) {
+                                gifAdapter?.insertData(response.gifImages)
+                                gifOffset += response.gifImages.size
+                                Log.d(TAG, "gifOffset = $gifOffset")
+
+                                searchProgressBar.visibility = View.GONE
+
+                                gifAdapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                                        // super.onItemRangeInserted(positionStart, itemCount);
+                                        staggeredGridLayoutManager.smoothScrollToPosition(
+                                            recyclerSearches,
+                                            null,
+                                            positionStart + 5
+                                        )
+
+                                    }
+                                })
+                            }
+
+                            override fun onFailed(exception: Exception) {
+                                Log.e(TAG, "onFailed: ${exception.message}")
+                            }
+                        })
+                }
+
+            })
+        }
     }
 
 

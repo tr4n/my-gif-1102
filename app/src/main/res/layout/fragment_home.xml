@@ -42,4 +42,16 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/recyclerTrendingSearches" />
+
+	<ProgressBar
+		android:id="@+id/progressBar"
+		style="?android:attr/progressBarStyle"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginEnd="8dp"
+		android:layout_marginBottom="32dp"
+		app:layout_constraintBottom_toBottomOf="@+id/recyclerTrendingGifs"
+		app:layout_constraintEnd_toEndOf="@+id/recyclerTrendingGifs"
+		app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

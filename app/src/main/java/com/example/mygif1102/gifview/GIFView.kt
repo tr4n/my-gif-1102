@@ -23,8 +23,7 @@ class GIFView : View {
 
     init {
         isFocusable = true
-        val randomResourceColorId = COLORS[Random.nextInt(COLORS.size)]
-        setBackgroundResource(randomResourceColorId)
+        setBackgroundResource(COLORS.random())
     }
 
     var resourceId: Int
